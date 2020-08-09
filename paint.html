@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>paint app</title>
+</head>
+<body>
+    <style>
+        #color{
+            height: 40px;
+            width: 40px;
+            padding: 0px;
+            border: none;
+        }
+        #thickness{
+            position: absolute;
+
+            top: 5px;
+            height: 20px;
+            padding: 10px;
+            border-radius: 2px;
+            margin-top: 0px;
+            border: 1px solid black;
+        }
+        #canvas{
+            border: 1px solid black;
+          
+        }
+
+    </style>
+    <div class="control">
+        <input type="color" id="color">
+        <input type="number" id="thickness" value="3">
+    </div>
+    <canvas id="canvas" height="400px" width="1130">
+
+    </canvas>
+    <script>
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+
+         ctx.fillStyle = "white";
+         ctx.fillRect(0,0,500,500);
+         ctx.fillStyle = "black";
+
+
+         let brush_color = "black";
+         let size = 3;
+
+         document.getElementById("color").addEventListener("change",function(){
+             brush_color = this.value;
+         });
+         document.getElementById("thickness").addEventListener("change",function(){
+            size = this.value;  
+         });
+
+         var painting = false;
+
+         function painting_start(e){
+             painting = true;
+             ctx.beginPath();
+             draw(e)
+         }
+         function painting_end(e){
+             painting = false;
+         }
+         function draw(e){
+           
+              if(painting==false) return;  
+           
+             let x = e.clientX;
+             let y = e.clientY - canvas.offsetTop;
+
+             ctx.lineWidth = size;
+             ctx.lineCap = "round";
+              ctx.lineTo(x,y);
+              ctx.strokeStyle = brush_color;
+
+              ctx.stroke();
+           }
+canvas.addEventListener("mousedown",painting_start);
+canvas.addEventListener("mouseup",painting_end);
+canvas.addEventListener("mousemove",draw);
+         
+         
+    </script>
+</body>
+</html>
